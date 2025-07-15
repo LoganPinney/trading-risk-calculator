@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Calculator, TrendingUp, TrendingDown, AlertTriangle, DollarSign } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Calculator, TrendingUp, AlertTriangle, DollarSign } from 'lucide-react';
 
 const TradingRiskCalculator = () => {
   const [formData, setFormData] = useState({
@@ -26,13 +26,13 @@ const TradingRiskCalculator = () => {
       ...prev,
       [name]: value
     }));
-  };
+  }, [formData]);
 
   useEffect(() => {
     calculateRisk();
-  }, [formData]);
+  }, [calculateRisk]);
 
-  const calculateRisk = () => {
+  const calculateRisk = useCallback(() => {
     const {
       accountBalance,
       riskPercentage,

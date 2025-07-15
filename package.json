@@ -1,74 +1,46 @@
 {
   "name": "trading-risk-calculator",
   "version": "1.0.0",
-  "description": "A desktop trading risk calculator with real-time visualization",
-  "main": "src/electron/main.js",
-  "homepage": "./",
+  "author": "LP <info@loganpinney.com>",
+  "description": "Professional Trading Risk Calculator",
+  "main": "build/electron.js",
+  "homepage": "loganpinney.com",
+  "private": true,
+  "dependencies": {
+    "electron-is-dev": "^2.0.0"
+  },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
     "electron": "electron .",
     "electron:dev": "concurrently \"npm start\" \"wait-on http://localhost:3000 && electron .\"",
     "electron:build": "npm run build && electron-builder",
-    "dist": "npm run build && electron-builder --publish=never",
-    "pack": "electron-builder --dir",
-    "postinstall": "electron-builder install-app-deps"
+    "build": "react-scripts build",
+    "postbuild": "cp public/electron.js build/ && cp public/preload.js build/"
   },
   "build": {
-    "appId": "com.yourcompany.trading-risk-calculator",
+    "appId": "com.tradingapp.riskcalculator",
     "productName": "Trading Risk Calculator",
     "directories": {
       "output": "dist"
     },
     "files": [
       "build/**/*",
-      "src/electron/**/*",
       "node_modules/**/*"
     ],
     "mac": {
-      "icon": "public/icon.png",
-      "category": "public.app-category.finance"
+      "category": "public.app-category.finance",
+      "target": "dmg"
     },
     "win": {
-      "icon": "public/icon.png",
-      "target": "nsis"
+      "target": "nsis",
+      "icon": "build/icon.ico"
     },
     "linux": {
-      "icon": "public/icon.png",
-      "target": "AppImage"
+      "target": "AppImage",
+      "category": "Office"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
     }
-  },
-  "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "recharts": "^2.8.0",
-    "lucide-react": "^0.263.1"
-  },
-  "devDependencies": {
-    "react-scripts": "^5.0.1",
-    "electron": "^25.3.0",
-    "electron-builder": "^24.6.3",
-    "concurrently": "^8.2.0",
-    "wait-on": "^7.0.1"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
   }
 }
