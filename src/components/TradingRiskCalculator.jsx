@@ -26,11 +26,7 @@ const TradingRiskCalculator = () => {
       ...prev,
       [name]: value
     }));
-  }, [formData]);
-
-  useEffect(() => {
-    calculateRisk();
-  }, [calculateRisk]);
+  };
 
   const calculateRisk = useCallback(() => {
     const {
@@ -84,7 +80,11 @@ const TradingRiskCalculator = () => {
       stopLossDistance,
       takeProfitDistance
     });
-  };
+  }, [formData]);
+
+  useEffect(() => {
+    calculateRisk();
+  }, [calculateRisk]);
 
   const getRiskLevel = () => {
     const risk = parseFloat(formData.riskPercentage);
