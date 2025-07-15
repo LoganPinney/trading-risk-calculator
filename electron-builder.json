@@ -1,0 +1,48 @@
+ {
+  "appId": "com.yourcompany.trading-risk-calculator",
+  "productName": "Trading Risk Calculator",
+  "directories": {
+    "output": "dist"
+  },
+  "files": [
+    "build/**/*",
+    "src/electron/**/*"
+  ],
+  "extraMetadata": {
+    "main": "src/electron/main.js"
+  },
+  "mac": {
+    "icon": "public/icon.png",
+    "category": "public.app-category.finance",
+    "hardenedRuntime": true,
+    "entitlements": "build/entitlements.mac.plist",
+    "entitlementsInherit": "build/entitlements.mac.plist"
+  },
+  "win": {
+    "icon": "public/icon.png",
+    "target": [
+      {
+        "target": "nsis",
+        "arch": [
+          "x64",
+          "ia32"
+        ]
+      }
+    ]
+  },
+  "linux": {
+    "icon": "public/icon.png",
+    "target": [
+      {
+        "target": "AppImage",
+        "arch": [
+          "x64"
+        ]
+      }
+    ]
+  },
+  "nsis": {
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true
+  }
+}
