@@ -31,7 +31,8 @@
     "electron": "electron .",
     "electron:dev": "concurrently \"npm start\" \"wait-on http://localhost:3000 && electron .\"",
     "electron:build": "npm run build && electron-builder",
-    "postbuild": "cp public/electron.js build/ && cp public/preload.js build/"
+    "postbuild": "cp public/electron.js build/ && cp public/preload.js build/",
+    "dev": "npm run electron:dev"
   },
   "eslintConfig": {
     "extends": [
