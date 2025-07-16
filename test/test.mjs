@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { calculateRiskMetrics, generateChartData, validateParams } from '../src/utils/calculations.js';
+import { calculateRiskMetrics, generateChartData, validateParams } from '../src/shared/calculations.js';
 
 function testCalculateRiskMetrics() {
   const params = {
