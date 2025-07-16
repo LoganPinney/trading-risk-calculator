@@ -1,5 +1,5 @@
-import assert from 'node:assert';
-import { calculateRiskMetrics, generateChartData, validateParams } from '../src/shared/calculations.js';
+import assert from 'assert';
+import { calculateRiskMetrics, generateChartData, validateParams } from '../src/utils/calculations.js';
 
 function testCalculateRiskMetrics() {
   const params = {
@@ -9,22 +9,22 @@ function testCalculateRiskMetrics() {
     weeklyMaxLoss: 10,
     sharePrice: 50,
     numShares: 100,
-    profitTargetPerShare: 5
+    profitTargetPerShare: 2
   };
-  const r = calculateRiskMetrics(params);
-  assert.strictEqual(r.shareSize, 5000);
-  assert.strictEqual(r.riskPerTrade, 200);
-  assert.strictEqual(r.dailyMaxLossAmount, 500);
-  assert.strictEqual(r.weeklyMaxLossAmount, 1000);
-  assert.strictEqual(r.totalPotentialProfit, 500);
-  assert.strictEqual(r.totalPotentialLoss, 200);
-  assert.strictEqual(r.riskRewardRatio, 2.5);
-  assert.strictEqual(r.tradesPerDay, 2);
-  assert.strictEqual(r.tradesPerWeek, 5);
-  assert.strictEqual(r.riskPercentOfCapital, 2);
+  const result = calculateRiskMetrics(params);
+  assert.strictEqual(result.shareSize, 5000);
+  assert.strictEqual(result.riskPerTrade, 200);
+  assert.strictEqual(result.dailyMaxLossAmount, 500);
+  assert.strictEqual(result.weeklyMaxLossAmount, 1000);
+  assert.strictEqual(result.totalPotentialProfit, 200);
+  assert.strictEqual(result.totalPotentialLoss, 200);
+  assert.strictEqual(result.riskRewardRatio, 1);
+  assert.strictEqual(result.tradesPerDay, 2);
+  assert.strictEqual(result.tradesPerWeek, 5);
+  assert.strictEqual(result.riskPercentOfCapital, 2);
 }
 
-function testCalculateRiskMetricsZero() {
+function testCalculateRiskMetricsZeroRisk() {
   const params = {
     startingCapital: 10000,
     riskTolerance: 0,
@@ -32,22 +32,76 @@ function testCalculateRiskMetricsZero() {
     weeklyMaxLoss: 10,
     sharePrice: 50,
     numShares: 100,
-    profitTargetPerShare: 5
+    profitTargetPerShare: 2
   };
-  const r = calculateRiskMetrics(params);
-  assert.strictEqual(r.totalPotentialLoss, 0);
-  assert.strictEqual(r.riskRewardRatio, 0);
-  assert.strictEqual(r.tradesPerDay, 0);
+  const result = calculateRiskMetrics(params);
+  assert.strictEqual(result.riskPerTrade, 0);
+  assert.strictEqual(result.totalPotentialLoss, 0);
+  assert.strictEqual(result.riskRewardRatio, 0);
+  assert.strictEqual(result.tradesPerDay, 0);
+  assert.strictEqual(result.tradesPerWeek, 0);
+  assert.strictEqual(result.riskPercentOfCapital, 0);
 }
 
-function testValidateParamsNegative() {
+function testGenerateChartData() {
   const params = {
-    startingCapital: -1,
-    riskTolerance: 150,
-    dailyMaxLoss: -5,
-    weeklyMaxLoss: 0,
+    startingCapital: 10000,
+    riskTolerance: 2,
+    sharePrice: 50,
+    profitTargetPerShare: 2
+  };
+  const data = generateChartData(params);
+  assert.strictEqual(data.length, 21);
+  assert.deepStrictEqual(data[0], {
+    shares: 0,
+    shareSize: 0,
+    potentialProfit: 0,
+    potentialLoss: 0,
+    riskPercent: 0
+  });
+  const last = data[data.length - 1];
+  assert.strictEqual(last.shares, 200);
+  assert.strictEqual(last.shareSize, 10000);
+  assert.strictEqual(last.potentialProfit, 400);
+  assert.strictEqual(last.potentialLoss, 200);
+  assert.strictEqual(last.riskPercent, 2);
+}
+
+function testGenerateChartDataZeroSharePrice() {
+  const params = {
+    startingCapital: 5000,
+    riskTolerance: 5,
     sharePrice: 0,
-    numShares: -10,
+    profitTargetPerShare: 1
+  };
+  const data = generateChartData(params);
+  assert.ok(data.every(d => d.shareSize === 0));
+  assert.ok(data.every(d => d.potentialLoss === 0));
+  assert.ok(data.every(d => d.riskPercent === 0));
+}
+
+function testValidateParamsValid() {
+  const params = {
+    startingCapital: 10000,
+    riskTolerance: 2,
+    dailyMaxLoss: 5,
+    weeklyMaxLoss: 10,
+    sharePrice: 50,
+    numShares: 100,
+    profitTargetPerShare: 2
+  };
+  const errors = validateParams(params);
+  assert.strictEqual(errors.length, 0);
+}
+
+function testValidateParamsInvalid() {
+  const params = {
+    startingCapital: -100,
+    riskTolerance: 200,
+    dailyMaxLoss: 0,
+    weeklyMaxLoss: -5,
+    sharePrice: 0,
+    numShares: 0,
     profitTargetPerShare: -1
   };
   const errors = validateParams(params);
@@ -60,25 +114,30 @@ function testValidateParamsNegative() {
   assert.ok(errors.includes('Profit target per share must be greater than 0'));
 }
 
-function testGenerateChartData() {
-  const params = {
-    startingCapital: 10000,
-    riskTolerance: 1,
-    sharePrice: 10,
-    profitTargetPerShare: 2
-  };
-  const data = generateChartData({ ...params, numShares: 0 });
-  assert.strictEqual(data[0].shares, 0);
-  assert.strictEqual(data[data.length - 1].shares, 200);
-  assert.ok(data.every(d => d.potentialLoss >= 0));
+const tests = [
+  { name: 'calculateRiskMetrics', fn: testCalculateRiskMetrics },
+  { name: 'calculateRiskMetrics zero risk', fn: testCalculateRiskMetricsZeroRisk },
+  { name: 'generateChartData', fn: testGenerateChartData },
+  { name: 'generateChartData zero share price', fn: testGenerateChartDataZeroSharePrice },
+  { name: 'validateParams valid', fn: testValidateParamsValid },
+  { name: 'validateParams invalid', fn: testValidateParamsInvalid }
+];
+
+let failed = 0;
+for (const t of tests) {
+  try {
+    t.fn();
+    console.log('✓', t.name);
+  } catch (err) {
+    failed++;
+    console.error('✗', t.name);
+    console.error(err);
+  }
 }
 
-function run() {
-  testCalculateRiskMetrics();
-  testCalculateRiskMetricsZero();
-  testValidateParamsNegative();
-  testGenerateChartData();
-  console.log('All tests passed.');
+if (failed === 0) {
+  console.log('All tests passed');
+} else {
+  console.error(`${failed} tests failed`);
+  process.exit(1);
 }
-
-run();
