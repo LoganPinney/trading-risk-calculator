@@ -6,10 +6,10 @@
   },
   "files": [
     "build/**/*",
-    "src/electron/**/*"
+    "src/main/**/*"
   ],
   "extraMetadata": {
-    "main": "src/electron/main.js"
+    "main": "src/main/main.js"
   },
   "mac": {
     "icon": "public/assets/icon.png",
