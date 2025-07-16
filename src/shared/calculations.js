@@ -101,3 +101,42 @@ export const validateParams = (params) => {
   
   return errors;
 };
+// === Additional helpers used by the React calculator ===
+
+/**
+ * Calculate the dollar amount at risk for a single trade.
+ * Formula: (account balance * risk percent) / 100
+ */
+export const calculateRiskAmount = (balance, riskPercent) => (balance * riskPercent) / 100;
+
+/**
+ * Determine the distance between entry and stop price depending on position type.
+ */
+export const calculateStopLossDistance = (entry, stop, type) =>
+  type === 'long' ? entry - stop : stop - entry;
+
+/**
+ * Determine the distance to the take profit price if provided.
+ */
+export const calculateTakeProfitDistance = (entry, takeProfit, type) => {
+  if (!takeProfit) return 0;
+  return type === 'long' ? takeProfit - entry : entry - takeProfit;
+};
+
+/**
+ * Calculate position size while guarding against division by zero.
+ */
+export const calculatePositionSize = (riskAmount, stopLossDistance) =>
+  stopLossDistance > 0 ? riskAmount / stopLossDistance : 0;
+
+/**
+ * Calculate potential profit using position size and take profit distance.
+ */
+export const calculatePotentialProfit = (positionSize, takeProfitDistance) =>
+  takeProfitDistance > 0 ? positionSize * takeProfitDistance : 0;
+
+/**
+ * Compute risk/reward ratio. Returns 0 when either value is not positive.
+ */
+export const calculateRiskRewardRatio = (potentialProfit, riskAmount) =>
+  riskAmount > 0 && potentialProfit > 0 ? potentialProfit / riskAmount : 0
