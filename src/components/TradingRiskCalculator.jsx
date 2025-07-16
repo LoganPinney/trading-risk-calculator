@@ -1,5 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Calculator, TrendingUp, AlertTriangle, DollarSign } from 'lucide-react';
+import {
+  calculateRiskAmount,
+  calculateStopLossDistance,
+  calculateTakeProfitDistance,
+  calculatePositionSize,
+  calculatePotentialProfit,
+  calculateRiskRewardRatio
+} from '../shared/calculations';
 
 const TradingRiskCalculator = () => {
   const [formData, setFormData] = useState({
@@ -56,21 +64,13 @@ const TradingRiskCalculator = () => {
     const stop = parseFloat(stopLoss);
     const tp = takeProfit ? parseFloat(takeProfit) : 0;
 
-    const riskAmount = (balance * risk) / 100;
-    
-    let stopLossDistance, takeProfitDistance, positionSize, potentialProfit, riskRewardRatio;
-
-    if (positionType === 'long') {
-      stopLossDistance = entry - stop;
-      takeProfitDistance = tp ? tp - entry : 0;
-    } else {
-      stopLossDistance = stop - entry;
-      takeProfitDistance = tp ? entry - tp : 0;
-    }
-
-    positionSize = stopLossDistance > 0 ? riskAmount / stopLossDistance : 0;
-    potentialProfit = takeProfitDistance > 0 ? positionSize * takeProfitDistance : 0;
-    riskRewardRatio = riskAmount > 0 && potentialProfit > 0 ? potentialProfit / riskAmount : 0;
+    // Perform core risk calculations using shared helper functions
+    const riskAmount = calculateRiskAmount(balance, risk);
+    const stopLossDistance = calculateStopLossDistance(entry, stop, positionType);
+    const takeProfitDistance = calculateTakeProfitDistance(entry, tp, positionType);
+    const positionSize = calculatePositionSize(riskAmount, stopLossDistance);
+    const potentialProfit = calculatePotentialProfit(positionSize, takeProfitDistance);
+    const riskRewardRatio = calculateRiskRewardRatio(potentialProfit, riskAmount);
 
     setCalculations({
       riskAmount,
