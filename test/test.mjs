@@ -40,6 +40,32 @@ function testCalculateRiskMetricsZero() {
   assert.strictEqual(r.tradesPerDay, 0);
 }
 
+function testCalculateRiskMetricsInvalid() {
+  const params = {
+    startingCapital: 0,
+    riskTolerance: 2,
+    dailyMaxLoss: 5,
+    weeklyMaxLoss: 10,
+    sharePrice: 50,
+    numShares: 100,
+    profitTargetPerShare: 5
+  };
+  assert.throws(() => calculateRiskMetrics(params), /Invalid calculation parameters/);
+}
+
+function testCalculateRiskMetricsInvalidRange() {
+  const params = {
+    startingCapital: 10000,
+    riskTolerance: 150,
+    dailyMaxLoss: 5,
+    weeklyMaxLoss: 10,
+    sharePrice: 50,
+    numShares: 100,
+    profitTargetPerShare: 5
+  };
+  assert.throws(() => calculateRiskMetrics(params), /Invalid calculation parameters/);
+}
+
 function testValidateParamsNegative() {
   const params = {
     startingCapital: -1,
@@ -76,6 +102,8 @@ function testGenerateChartData() {
 function run() {
   testCalculateRiskMetrics();
   testCalculateRiskMetricsZero();
+  testCalculateRiskMetricsInvalid();
+  testCalculateRiskMetricsInvalidRange();
   testValidateParamsNegative();
   testGenerateChartData();
   console.log('All tests passed.');
