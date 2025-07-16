@@ -86,7 +86,7 @@ $ cd trading‑risk‑calculator
 $ npm i
 
 # 3. Launch in dev with hot‑reload
-$ npm run dev          # spawns Vite + Electron concurrently
+$ npm run electron:dev          # spawns Vite + Electron concurrently
 ```
 
 The app window opens automatically. Any change to React code hot‑reloads; Electron restarts when main‑process files change.
@@ -95,14 +95,14 @@ The app window opens automatically. Any change to React code hot‑reloads; Elec
 
 | Script           | Purpose                                   |
 | ---------------- | ----------------------------------------- |
-| `npm run dev`    | Start Vite + Electron in development      |
+| `npm run electron:dev` | Start Vite + Electron in development      |
 | `npm run dev:ui` | (UI only) start Vite web preview          |
 | `npm run lint`   | Run ESLint + Prettier                     |
 | `npm test`       | Unit tests via Vitest                     |
 | `npm run build`  | Build production React + Electron bundles |
-| `npm run dist`   | Create installers via electron‑builder    |
+| `npm run electron:build`   | Create installers via electron‑builder    |
 
-> **Note**: If `npm run dev` throws *Missing script*, ensure your `package.json` contains the scripts block from `template.package.json`.
+> **Note**: If `npm run electron:dev` throws *Missing script*, ensure your `package.json` contains the scripts block from `template.package.json`.
 
 ---
 
@@ -144,7 +144,7 @@ reward_one = |entry – stop|
 ratio      = target_distance / risk_distance  # displayed live
 ```
 
-All math is handled in *src/lib/calc.ts* with unit tests ensuring accuracy.
+All math is handled in *src/shared/calculations.js* with unit tests ensuring accuracy.
 
 ---
 
