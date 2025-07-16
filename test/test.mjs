@@ -1,4 +1,12 @@
 import assert from 'assert';
+import babelRegister from '@babel/register';
+babelRegister({
+  extensions: ['.js', '.jsx'],
+  presets: [
+    ['@babel/preset-env', { targets: { node: 'current' } }],
+    ['@babel/preset-react', { runtime: 'automatic' }]
+  ]
+});
 import { calculateRiskMetrics, generateChartData, validateParams } from '../src/shared/calculations.js';
 
 function testCalculateRiskMetrics() {
@@ -122,6 +130,12 @@ const tests = [
   { name: 'validateParams valid', fn: testValidateParamsValid },
   { name: 'validateParams invalid', fn: testValidateParamsInvalid }
 ];
+
+// Import React component test implemented with React Testing Library
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const testRiskRewardChart = require('./RiskRewardChart.test.jsx');
+tests.push({ name: 'RiskRewardChart renders', fn: testRiskRewardChart.default || testRiskRewardChart });
 
 let failed = 0;
 for (const t of tests) {
