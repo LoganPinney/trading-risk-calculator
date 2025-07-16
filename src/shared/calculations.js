@@ -168,4 +168,4 @@ export const calculatePotentialProfit = (positionSize, takeProfitDistance) =>
  * Compute risk/reward ratio. Returns 0 when either value is not positive.
  */
 export const calculateRiskRewardRatio = (potentialProfit, riskAmount) =>
-  riskAmount > 0 && potentialProfit > 0 ? potentialProfit / riskAmount : 0
+  riskAmount > 0 && potentialProfit > 0 ? potentialProfit / riskAmount : 0;
