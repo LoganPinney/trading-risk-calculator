@@ -1,5 +1,5 @@
 import React from 'react';
-import TradingRiskCalculator from './components/TradingRiskCalculator';
+import TradingRiskCalculator from './renderer/TradingRiskCalculator';
 import './App.css';
 
 function App() {
