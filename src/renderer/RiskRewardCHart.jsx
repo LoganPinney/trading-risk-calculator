@@ -14,6 +14,7 @@ export default function RiskRewardChart({ riskAmount, potentialProfit }) {
       <CartesianGrid stroke="#ccc" strokeDasharray="3 3" />
       <XAxis type="number" dataKey="rr" domain={[0.5, 3]} />
       <YAxis type="number" domain={[0, 100]} />
+      <Line type="monotone" dataKey="winRate" stroke="blue" dot={false} />
       <ReferenceLine
         segment={[
           { rr: 0.5, winRate: 100 / (1 + 0.5) },
@@ -21,6 +22,7 @@ export default function RiskRewardChart({ riskAmount, potentialProfit }) {
         ]}
         stroke="gray"
       />
+      
       <Scatter data={[point]} fill={ratio >= 0 ? 'red' : 'black'} />
     </LineChart>
   );
