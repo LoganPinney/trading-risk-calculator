@@ -12,14 +12,14 @@
     "main": "src/electron/main.js"
   },
   "mac": {
-    "icon": "public/icon.png",
+    "icon": "public/assets/icon.png",
     "category": "public.app-category.finance",
     "hardenedRuntime": true,
     "entitlements": "build/entitlements.mac.plist",
     "entitlementsInherit": "build/entitlements.mac.plist"
   },
   "win": {
-    "icon": "public/icon.png",
+    "icon": "public/assets/icon.png",
     "target": [
       {
         "target": "nsis",
@@ -31,7 +31,7 @@
     ]
   },
   "linux": {
-    "icon": "public/icon.png",
+    "icon": "public/assets/icon.png",
     "target": [
       {
         "target": "AppImage",
