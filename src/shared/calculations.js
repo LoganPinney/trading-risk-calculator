@@ -14,6 +14,35 @@ export const calculateRiskMetrics = (params) => {
     profitTargetPerShare
   } = params;
 
+// Validate inputs before proceeding with calculations
+  const required = [
+    startingCapital,
+    riskTolerance,
+    dailyMaxLoss,
+    weeklyMaxLoss,
+    sharePrice,
+    numShares,
+    profitTargetPerShare
+  ];
+  if (required.some(v => typeof v !== 'number' || Number.isNaN(v))) {
+    throw new Error('Invalid calculation parameters');
+  }
+
+  if (
+    startingCapital <= 0 ||
+    sharePrice <= 0 ||
+    numShares <= 0 ||
+    profitTargetPerShare <= 0 ||
+    riskTolerance < 0 ||
+    riskTolerance > 100 ||
+    dailyMaxLoss < 0 ||
+    dailyMaxLoss > 100 ||
+    weeklyMaxLoss < 0 ||
+    weeklyMaxLoss > 100
+  ) {
+    throw new Error('Invalid calculation parameters');
+  }
+
   // Basic calculations
   const shareSize = sharePrice * numShares;
   const riskPerTrade = (startingCapital * riskTolerance) / 100;
