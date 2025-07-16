@@ -14,6 +14,7 @@ import {
   calculatePotentialProfit,
   calculateRiskRewardRatio
 } from '../shared/calculations';
+import RiskRewardChart from './RiskRewardChart';
 
 const TradingRiskCalculator = () => {
   const [formData, setFormData] = useState({
@@ -278,6 +279,14 @@ const TradingRiskCalculator = () => {
                   : "❌ Poor risk/reward ratio. Consider adjusting your targets."
                 }
               </p>
+            </div>
+          )}
+          {calculations.riskRewardRatio > 0 && (
+            <div className="mt-4">
+              <RiskRewardChart
+                riskAmount={calculations.riskAmount}
+                potentialProfit={calculations.potentialProfit}
+              />
             </div>
           )}
         </div>
