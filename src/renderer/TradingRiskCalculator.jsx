@@ -5,6 +5,7 @@ import {
   AlertTriangle,
   DollarSign
 } from 'lucide-react';
+import { Slider } from '@mui/material';
 import {
   calculateRiskAmount,
   calculateStopLossDistance,
@@ -13,14 +14,15 @@ import {
   calculatePotentialProfit,
   calculateRiskRewardRatio
 } from '../shared/calculations';
+import RiskRewardChart from './RiskRewardChart';
 
 const TradingRiskCalculator = () => {
   const [formData, setFormData] = useState({
     accountBalance: '',
-    riskPercentage: '2',
-    entryPrice: '',
-    stopLoss: '',
-    takeProfit: '',
+    riskPercentage: 2,
+    entryPrice: 0,
+    stopLoss: 0,
+    takeProfit: 0,
     positionType: 'long'
   });
 
@@ -126,15 +128,15 @@ const TradingRiskCalculator = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Risk Percentage (%)
             </label>
-            <input
-              type="number"
-              name="riskPercentage"
+            <Slider
+              className="w-full"
               value={formData.riskPercentage}
-              onChange={handleInputChange}
-              step="0.1"
-              min="0.1"
-              max="10"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              onChange={(e, v) =>
+                setFormData({ ...formData, riskPercentage: v })
+              }
+              min={0}
+              max={10}
+              step={0.1}
             />
           </div>
 
@@ -157,14 +159,14 @@ const TradingRiskCalculator = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Entry Price ($)
             </label>
-            <input
-              type="number"
-              name="entryPrice"
+            <Slider
+              className="w-full"
               value={formData.entryPrice}
-              onChange={handleInputChange}
-              placeholder="100.00"
-              step="0.01"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              onChange={(e, v) =>
+                setFormData({ ...formData, entryPrice: v })
+              }
+              min={0}
+              step={0.01}
             />
           </div>
 
@@ -172,14 +174,14 @@ const TradingRiskCalculator = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Stop Loss ($)
             </label>
-            <input
-              type="number"
-              name="stopLoss"
+            <Slider
+              className="w-full"
               value={formData.stopLoss}
-              onChange={handleInputChange}
-              placeholder="95.00"
-              step="0.01"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              onChange={(e, v) =>
+                setFormData({ ...formData, stopLoss: v })
+              }
+              min={0}
+              step={0.01}
             />
           </div>
 
@@ -187,14 +189,14 @@ const TradingRiskCalculator = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Take Profit ($) - Optional
             </label>
-            <input
-              type="number"
-              name="takeProfit"
+            <Slider
+              className="w-full"
               value={formData.takeProfit}
-              onChange={handleInputChange}
-              placeholder="110.00"
-              step="0.01"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              onChange={(e, v) =>
+                setFormData({ ...formData, takeProfit: v })
+              }
+              min={0}
+              step={0.01}
             />
           </div>
         </div>
@@ -277,6 +279,14 @@ const TradingRiskCalculator = () => {
                   : "❌ Poor risk/reward ratio. Consider adjusting your targets."
                 }
               </p>
+            </div>
+          )}
+          {calculations.riskRewardRatio > 0 && (
+            <div className="mt-4">
+              <RiskRewardChart
+                riskAmount={calculations.riskAmount}
+                potentialProfit={calculations.potentialProfit}
+              />
             </div>
           )}
         </div>

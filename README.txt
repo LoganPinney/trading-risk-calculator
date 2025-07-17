@@ -101,6 +101,8 @@ The app window opens automatically. Any change to React code hot‑reloads; Elec
 | `npm test`       | Unit tests via Vitest                     |
 | `npm run build`  | Build production React + Electron bundles |
 | `npm run electron:build`   | Create installers via electron‑builder    |
+| `npm run clean`  | Remove existing build and dist folders    |
+| `npm run rebuild`| Clean and then build new distribution     |
 
 > **Note**: If `npm run electron:dev` throws *Missing script*, ensure your `package.json` contains the scripts block from `template.package.json`.
 
@@ -123,16 +125,28 @@ No external APIs are required, but you can add custom vars prefixed with `VITE_`
 ---
 
 ## 7. Using the Calculator
+Adjust the four sliders at the top of the window. Each one can also be typed for precise values.
 
-1. **Set Entry Price** – drag or type.
-2. **Set Stop‑Loss** – must differ from entry; negative values unsupported.
-3. **Choose Capital** – amount willing to deploy on this trade.
-4. **Set Risk %** – fraction of capital you accept to lose.
-5. Read real‑time outputs and red dot on the chart.
-6. Press **Copy Trade Plan** to clipboard (formatted for journaling).
+1. **Risk %** – how much of your account you're willing to lose.
+2. **Entry Price** – expected fill price for the trade.
+3. **Stop‑Loss** – price that exits the trade if hit.
+4. **Take‑Profit** – optional target level for locking in gains.
+5. Metrics update instantly and a red dot appears on the chart.
+6. Press **Copy Trade Plan** to copy the details.
+
+![Slider UI](public/assets/slider_controls.png)
 
 Validation prevents impossible inputs (e.g., 0 or identical entry/stop).
 
+### Risk/Reward Chart
+
+The **Risk Reward Chart** helps visualize whether a trade setup has a
+mathematically favorable edge. The chart plots risk/reward ratio along the
+x‑axis (0.5 → 3) against the win rate required to break even on the y‑axis. A
+gray diagonal line marks breakeven. Your current trade appears as a red dot. If
+that dot falls below the gray line, the risk/reward ratio is positive and
+requires a lower win rate to profit. See `public/assets/profit_loss_ratio_graph.jpg` for a screenshot 
+of the chart in action.
 ---
 
 ## 8. Calculation Logic Explained
