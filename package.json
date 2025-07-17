@@ -26,7 +26,8 @@
     "concurrently": "^7.6.0",
     "electron": "^25.9.8",
     "electron-builder": "^24.13.3",
-    "wait-on": "^7.0.1"
+    "wait-on": "^7.0.1",
+    "rimraf": "^5.0.5"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -36,6 +37,8 @@
     "electron": "electron .",
     "electron:dev": "concurrently \"npm start\" \"wait-on http://localhost:3000 && electron .\"",
     "electron:build": "npm run build && electron-builder",
+    "clean": "rimraf dist build release",
+    "rebuild": "npm run clean && npm run electron:build",
     "postbuild": "cp public/electron.js build/ && cp public/preload.js build/",
     "dev": "npm run electron:dev"
   },
