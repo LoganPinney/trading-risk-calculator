@@ -101,6 +101,8 @@ The app window opens automatically. Any change to React code hot‑reloads; Elec
 | `npm test`       | Unit tests via Vitest                     |
 | `npm run build`  | Build production React + Electron bundles |
 | `npm run electron:build`   | Create installers via electron‑builder    |
+| `npm run clean`  | Remove existing build and dist folders    |
+| `npm run rebuild`| Clean and then build new distribution     |
 
 > **Note**: If `npm run electron:dev` throws *Missing script*, ensure your `package.json` contains the scripts block from `template.package.json`.
 
